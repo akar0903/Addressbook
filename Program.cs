@@ -51,6 +51,21 @@ namespace address
         {
             Console.WriteLine("Welcome to adress book");
             book mybook = new book();
+            mybook.firstname = "Arun";
+            mybook.lastname = "Karthik";
+            mybook.email = "av0019@srmist.edu.in";
+            mybook.zip = 600096;
+            mybook.number = 9789894450;
+            mybook.city = "Chennai";
+            mybook.state = "Tamil Nadu";
+            Console.WriteLine(mybook.firstname);
+            Console.WriteLine(mybook.lastname);
+            Console.WriteLine(mybook.email);
+            Console.WriteLine(mybook.zip);
+            Console.WriteLine(mybook.number);
+            Console.WriteLine(mybook.city);
+            Console.WriteLine(mybook.state);
+            Console.ReadLine();
         }
     }
 }
