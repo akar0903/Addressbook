@@ -1,70 +1,66 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace address
+namespace AddressBook
 {
     internal class Program
     {
-        class book
+        class Book
         {
-            public string firstname;
-            public string lastname;
-            public string city;
-            public string state;
-            public long number;
-            public int zip;
-            public string email;
-            public void Setfirstname(string fname)
+            public string FirstName;
+            public string LastName;
+            public string City;
+            public string State;
+            public long Number;
+            public int Zip;
+            public string Email;
+            public Book(string fname, string lname, string scity, string sstate, long nnumber, int zzip, string eemail)
             {
-                firstname = fname;
-            }
-            public void Setlastname(string lname) 
-            {
-                    lastname = lname;    
-            }
-            public void Setcity(string scity)
-            {
-                city = scity;
-            }
-            public void Setstate(string sstate)
-            {
-                state = sstate;
-            }
-            public void Setnumber(long nnumber)
-            {
-                number = nnumber;
-            }
-            public void Setzip(int zzip)
-            {
-                zip = zzip;
-            }
-            public void Setemail(string eemail)
-            {
-                email = eemail;
+                FirstName = fname;
+                LastName = lname;
+                City = scity;
+                State = sstate;
+                Number = nnumber;
+                Zip = zzip;
+                Email = eemail;
             }
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to adress book");
-            book mybook = new book();
-            mybook.firstname = "Arun";
-            mybook.lastname = "Karthik";
-            mybook.email = "av0019@srmist.edu.in";
-            mybook.zip = 600096;
-            mybook.number = 9789894450;
-            mybook.city = "Chennai";
-            mybook.state = "Tamil Nadu";
-            Console.WriteLine(mybook.firstname);
-            Console.WriteLine(mybook.lastname);
-            Console.WriteLine(mybook.email);
-            Console.WriteLine(mybook.zip);
-            Console.WriteLine(mybook.number);
-            Console.WriteLine(mybook.city);
-            Console.WriteLine(mybook.state);
+            Console.WriteLine("Welcome to address book");
+           
+            Console.Write("Enter First Name: ");
+            string firstName = Console.ReadLine();
+
+            Console.Write("Enter Last Name: ");
+            string lastName = Console.ReadLine();
+
+            Console.Write("Enter Email: ");
+            string email = Console.ReadLine();
+
+            Console.Write("Enter Zip Code: ");
+            int zip = Convert.ToInt32(Console.ReadLine());
+
+            Console.Write("Enter Phone Number: ");
+            long number = Convert.ToInt64(Console.ReadLine());
+
+            Console.Write("Enter City: ");
+            string city = Console.ReadLine();
+
+            Console.Write("Enter State: ");
+            string state = Console.ReadLine();
+
+            
+            Book myBook = new Book(firstName, lastName, city, state, number, zip, email);
+
+            
+            Console.WriteLine("\nDetails entered:");
+            Console.WriteLine($"First Name: {myBook.FirstName}");
+            Console.WriteLine($"Last Name: {myBook.LastName}");
+            Console.WriteLine($"Email: {myBook.Email}");
+            Console.WriteLine($"Zip Code: {myBook.Zip}");
+            Console.WriteLine($"Phone Number: {myBook.Number}");
+            Console.WriteLine($"City: {myBook.City}");
+            Console.WriteLine($"State: {myBook.State}");
+
             Console.ReadLine();
         }
     }
