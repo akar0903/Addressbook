@@ -12,7 +12,8 @@ namespace AddressBook
             public long Number;
             public int Zip;
             public string Email;
-            public Book(string fname, string lname, string scity, string sstate, long nnumber, int zzip, string eemail)
+            public string EditedFirstname;
+            public Book(string fname, string lname, string scity, string sstate, long nnumber, int zzip, string eemail,string efirstname)
             {
                 FirstName = fname;
                 LastName = lname;
@@ -21,6 +22,7 @@ namespace AddressBook
                 Number = nnumber;
                 Zip = zzip;
                 Email = eemail;
+                EditedFirstname = efirstname;
             }
         }
         static void Main(string[] args)
@@ -48,12 +50,16 @@ namespace AddressBook
             Console.Write("Enter State: ");
             string state = Console.ReadLine();
 
-            
-            Book myBook = new Book(firstName, lastName, city, state, number, zip, email);
+            Console.Write("Enter Edited first Name: ");
+            string EditedFirstname = Console.ReadLine();
+            Console.WriteLine(firstName +" to "+EditedFirstname);
 
-            
+
+            Book myBook = new Book(firstName, lastName, city, state, number, zip, email,EditedFirstname);
+
             Console.WriteLine("\nDetails entered:");
-            Console.WriteLine($"First Name: {myBook.FirstName}");
+            //Console.WriteLine($"First Name: {myBook.FirstName}");
+            Console.WriteLine($"First Name:{myBook.EditedFirstname}");
             Console.WriteLine($"Last Name: {myBook.LastName}");
             Console.WriteLine($"Email: {myBook.Email}");
             Console.WriteLine($"Zip Code: {myBook.Zip}");
