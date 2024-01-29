@@ -8,27 +8,42 @@ using System.Threading.Tasks;
 
 namespace Address_Book_System
 {
-    class Contact
+
+    class AddressBook
     {
         public string firstname;
         public string lastname;
         public long phonenumber;
         public string email;
-    }
-    class AddressBook : Contact
-    {
         public string address;
         public string cityname;
         public string state;
         public long zipcode;
 
-        public void Add_details()
+        public void Add_details(Dictionary<string, List<AddressBook>> names)
         {
-            Console.Write("Enter First Name: ");
-            this.firstname = Console.ReadLine();
+            string name;
+            do
+            {
+                Console.Write("Enter First Name: ");
+                this.firstname = Console.ReadLine();
 
-            Console.Write("Enter Last Name: ");
-            this.lastname = Console.ReadLine();
+                Console.Write("Enter Last Name: ");
+                this.lastname = Console.ReadLine();
+
+                name = this.firstname + this.lastname;
+                if (!names.ContainsKey(name))
+                {
+                    names.Add(name, new List<AddressBook>());
+                    break;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("The Name already exist in the Address Book");
+                    Thread.Sleep(1000);
+                }
+            } while (names.ContainsKey(name));
 
             Console.Write("Enter Address: ");
             this.address = Console.ReadLine();
@@ -79,42 +94,42 @@ namespace Address_Book_System
                         {
                             case 1:
                                 Console.Clear();
-                                Console.WriteLine("Enter the New First Name : ");
+                                Console.WriteLine("Enter New First Name : ");
                                 contact[i].firstname = Console.ReadLine();
                                 break;
                             case 2:
                                 Console.Clear();
-                                Console.WriteLine("Enter the New Last Name : ");
+                                Console.WriteLine("Enter New Last Name : ");
                                 contact[i].lastname = Console.ReadLine();
                                 break;
                             case 3:
                                 Console.Clear();
-                                Console.WriteLine("Enter the New Phone Number : ");
+                                Console.WriteLine("Enter New Phone Number : ");
                                 contact[i].phonenumber = Convert.ToInt64(Console.ReadLine());
                                 break;
                             case 4:
                                 Console.Clear();
-                                Console.WriteLine("Enter the New Email : ");
+                                Console.WriteLine("Enter New Email : ");
                                 contact[i].email = Console.ReadLine();
                                 break;
                             case 5:
                                 Console.Clear();
-                                Console.WriteLine("Enter the New Address : ");
+                                Console.WriteLine("Enter New Address : ");
                                 contact[i].address = Console.ReadLine();
                                 break;
                             case 6:
                                 Console.Clear();
-                                Console.WriteLine("Enter the New City : ");
+                                Console.WriteLine("Enter New City : ");
                                 contact[i].cityname = Console.ReadLine();
                                 break;
                             case 7:
                                 Console.Clear();
-                                Console.WriteLine("Enter the New State : ");
+                                Console.WriteLine("Enter New State : ");
                                 contact[i].state = Console.ReadLine();
                                 break;
                             case 8:
                                 Console.Clear();
-                                Console.WriteLine("Enter the New ZipCode : ");
+                                Console.WriteLine("Enter New ZipCode : ");
                                 contact[i].zipcode = Convert.ToInt32(Console.ReadLine());
                                 break;
                             case 9:
@@ -145,6 +160,7 @@ namespace Address_Book_System
                 if (contact[i].firstname == name)
                 {
                     found = 1;
+                    contact[i].Display_details();
                     Console.WriteLine($"Are you sure of deleteing {name}\'s contact (Y/N)");
                     char ch = Convert.ToChar(Console.ReadLine());
                     if (ch == 'Y' || ch == 'y')
@@ -159,11 +175,11 @@ namespace Address_Book_System
                         Thread.Sleep(2000);
                     }
                 }
-                if (found == 0)
+                /*if (found == 0)
                 {
                     Console.WriteLine($"The contact with the name '{name}' is not found in the contact list.");
                     Thread.Sleep(2000);
-                }
+                }*/
             }
         }
     }
@@ -176,6 +192,7 @@ namespace Address_Book_System
         {
             Console.WriteLine("Welcome to Address Book Program");
             List<AddressBook> list = new List<AddressBook>();
+            Dictionary<string, List<AddressBook>> names = new Dictionary<string, List<AddressBook>>();
             AddressBook obj1 = new AddressBook();
             int flag = 0;
             do
@@ -189,7 +206,7 @@ namespace Address_Book_System
                         Console.Clear();
                         Console.WriteLine("Add details:\n");
                         AddressBook address = new AddressBook();
-                        address.Add_details();
+                        address.Add_details(names);
                         list.Add(address);
                         Console.Clear();
                         break;
@@ -198,6 +215,7 @@ namespace Address_Book_System
                         Console.WriteLine("Display Details\n");
                         for (int i = 0; i < list.Count; i++)
                         {
+                            Console.WriteLine(names);
                             list[i].Display_details();
                             Console.WriteLine();
                         }
