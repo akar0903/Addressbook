@@ -25,43 +25,43 @@ namespace Address_Book_System
 
         public string Firstname
         {
-            get;
-            set;
+            get { return firstname; }
+            set { firstname = value; }
         }
         public string Lastname
         {
-            get;
-            set;
+            get { return lastname; }
+            set { lastname = value; }
         }
         public string Address
         {
-            get;
-            set;
+            get { return address; }
+            set { address = value; }
         }
         public string City
         {
-            get;
-            set;
+            get { return city; }
+            set { city = value; }
         }
         public string State
         {
-            get;
-            set;
+            get { return state; }
+            set { state = value; }
         }
         public string Phonenumber
         {
-            get;
-            set;
+            get { return phonenumber; }
+            set { phonenumber = value; }
         }
         public string Email
         {
-            get;
-            set;
+            get { return email; }
+            set { email = value; }
         }
         public string Zipcode
         {
-            get;
-            set;
+            get { return zipcode; }
+            set { zipcode = value; }
         }
         public override bool Equals(object obj)
         {
@@ -243,6 +243,17 @@ namespace Address_Book_System
                 Thread.Sleep(2000);
             }
         }
+
+        public List<Contact> SearchByCity(string city)
+        {
+            return contacts.Where(contact => contact.City.Equals(city, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        public List<Contact> SearchByState(string state)
+        {
+            return contacts.Where(contact => contact.State.Equals(state, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
     }
 
     class User
@@ -277,6 +288,25 @@ namespace Address_Book_System
         {
             return dict;
         }
+        public List<Contact> SearchPersonsInCity(string city)
+        {
+            List<Contact> results = new List<Contact>();
+            foreach (var addressBook in dict.Values)
+            {
+                results.AddRange(addressBook.SearchByCity(city));
+            }
+            return results;
+        }
+
+        public List<Contact> SearchPersonsInState(string state)
+        {
+            List<Contact> results = new List<Contact>();
+            foreach (var addressBook in dict.Values)
+            {
+                results.AddRange(addressBook.SearchByState(state));
+            }
+            return results;
+        }
     }
     internal class Program
     {
@@ -288,7 +318,7 @@ namespace Address_Book_System
             do
             {
                 Console.WriteLine("Enter an Option to perform : ");
-                Console.WriteLine("1. Add a person\n2. DisplayPerson\n3. Add person details in address book\n4. Exit");
+                Console.WriteLine("1. Add a person\n2. DisplayPerson\n3. Add person details in address book\n4. Search by City\n5. Search by State\n6. Exit");
                 int choice = Convert.ToInt32(Console.ReadLine());
                 switch (choice)
                 {
@@ -361,16 +391,58 @@ namespace Address_Book_System
                                 Console.Clear();
                                 break;
                             }
+
                             Console.Clear();
                         } while (flag == 0);
                         break;
                     case 4:
+                        Console.Clear();
+                        Console.WriteLine("Enter the city to search: ");
+                        string searchCity = Console.ReadLine();
+                        var cityResults = user.SearchPersonsInCity(searchCity);
+                        DisplaySearchResults(cityResults);
+                        Thread.Sleep(2000);
+                        Console.Clear();
+                        break;
+                    case 5:
+                        Console.Clear();
+                        Console.WriteLine("Enter the state to search: ");
+                        string searchState = Console.ReadLine();
+                        var stateResults = user.SearchPersonsInState(searchState);
+                        DisplaySearchResults(stateResults);
+                        Thread.Sleep(2000);
+                        Console.Clear();
+                        break;
+                    case 6:
                         Console.Clear();
                         Console.WriteLine("Exited");
                         f = 1;
                         break;
                 }
             } while (f == 0);
+        }
+        static void DisplaySearchResults(List<Contact> results)
+        {
+            if (results.Any())
+            {
+                Console.WriteLine("Search Results:");
+                foreach (var contact in results)
+                {
+                    Console.WriteLine($"First Name: {contact.Firstname}");
+                    Console.WriteLine($"Last Name: {contact.Lastname}");
+                    Console.WriteLine($"Address: {contact.Address}");
+                    Console.WriteLine($"City: {contact.City}");
+                    Console.WriteLine($"State: {contact.State}");
+                    Console.WriteLine($"Phone: {contact.Phonenumber}");
+                    Console.WriteLine($"Email: {contact.Email}");
+                    Console.WriteLine($"Zipcode: {contact.Zipcode}");
+                    Console.WriteLine();
+                }
+            }
+            else
+            {
+                Console.WriteLine("No matching contacts found.");
+            }
         }
     }
 }
