@@ -79,6 +79,16 @@ namespace Address_Book_System
     }
     class AddressBook
     {
+        public int GetContactCountByCity(string city)
+        {
+            return contacts.Count(contact => contact.City.Equals(city, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public int GetContactCountByState(string state)
+        {
+            return contacts.Count(contact => contact.State.Equals(state, StringComparison.OrdinalIgnoreCase));
+        }
+    
         List<Contact> contacts = new List<Contact>();
         public void Add_details()
         {
@@ -248,6 +258,10 @@ namespace Address_Book_System
         {
             return contacts.Where(contact => contact.City.Equals(city, StringComparison.OrdinalIgnoreCase)).ToList();
         }
+        public List<Contact> SearchByName(string name)
+        {
+            return contacts.Where(contact => contact.Firstname.Equals(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
 
         public List<Contact> SearchByState(string state)
         {
@@ -258,6 +272,25 @@ namespace Address_Book_System
 
     class User
     {
+        public int GetContactCountByCity(string city)
+        {
+            int count = 0;
+            foreach (var addressBook in dict.Values)
+            {
+                count += addressBook.GetContactCountByCity(city);
+            }
+            return count;
+        }
+
+        public int GetContactCountByState(string state)
+        {
+            int count = 0;
+            foreach (var addressBook in dict.Values)
+            {
+                count += addressBook.GetContactCountByState(state);
+            }
+            return count;
+        }
         Dictionary<string, AddressBook> dict = new Dictionary<string, AddressBook>();
         public void AddPerson(string name)
         {
@@ -297,6 +330,16 @@ namespace Address_Book_System
             }
             return results;
         }
+        public List<Contact> SearchPersonsInName(string name)
+        {
+            List<Contact> results = new List<Contact>();
+            foreach(var addressBook in dict.Values)
+            {
+                results.AddRange(addressBook.SearchByName(name));
+            }
+            return results;
+
+        }
 
         public List<Contact> SearchPersonsInState(string state)
         {
@@ -318,7 +361,13 @@ namespace Address_Book_System
             do
             {
                 Console.WriteLine("Enter an Option to perform : ");
-                Console.WriteLine("1. Add a person\n2. DisplayPerson\n3. Add person details in address book\n4. Search by City\n5. Search by State\n6. Exit");
+                Console.WriteLine("1. Add a person\n" +
+                    "2. DisplayPerson\n" +
+                    "3. Add person details in address book\n" +
+                    "4. Search by City\n" +
+                    "5. Search by State\n" +
+                    "6. Search by name\n" +
+                    "7.Exit\n");
                 int choice = Convert.ToInt32(Console.ReadLine());
                 switch (choice)
                 {
@@ -401,6 +450,7 @@ namespace Address_Book_System
                         string searchCity = Console.ReadLine();
                         var cityResults = user.SearchPersonsInCity(searchCity);
                         DisplaySearchResults(cityResults);
+                        Console.WriteLine($"Number of contacts in {searchCity}: {user.GetContactCountByCity(searchCity)}");
                         Thread.Sleep(2000);
                         Console.Clear();
                         break;
@@ -410,14 +460,24 @@ namespace Address_Book_System
                         string searchState = Console.ReadLine();
                         var stateResults = user.SearchPersonsInState(searchState);
                         DisplaySearchResults(stateResults);
+                        Console.WriteLine($"Number of contacts in {searchState}: {user.GetContactCountByState(searchState)}");
                         Thread.Sleep(2000);
                         Console.Clear();
                         break;
                     case 6:
                         Console.Clear();
+                        Console.WriteLine("Enter the name to search");
+                        string searchname = Console.ReadLine();
+                        var nameResults = user.SearchPersonsInName(searchname);
+                        DisplaySearchResults(nameResults);
+                        Thread.Sleep(2000);
+                        break;
+                    case 7:
+                        Console.Clear();
                         Console.WriteLine("Exited");
                         f = 1;
                         break;
+                  
                 }
             } while (f == 0);
         }
@@ -428,14 +488,14 @@ namespace Address_Book_System
                 Console.WriteLine("Search Results:");
                 foreach (var contact in results)
                 {
-                    Console.WriteLine($"First Name: {contact.Firstname}");
-                    Console.WriteLine($"Last Name: {contact.Lastname}");
-                    Console.WriteLine($"Address: {contact.Address}");
+                    //Console.WriteLine($"First Name: {contact.Firstname}");
+                    //Console.WriteLine($"Last Name: {contact.Lastname}");
+                    //Console.WriteLine($"Address: {contact.Address}");
                     Console.WriteLine($"City: {contact.City}");
                     Console.WriteLine($"State: {contact.State}");
-                    Console.WriteLine($"Phone: {contact.Phonenumber}");
-                    Console.WriteLine($"Email: {contact.Email}");
-                    Console.WriteLine($"Zipcode: {contact.Zipcode}");
+                    //Console.WriteLine($"Phone: {contact.Phonenumber}");
+                    //Console.WriteLine($"Email: {contact.Email}");
+                    //Console.WriteLine($"Zipcode: {contact.Zipcode}");
                     Console.WriteLine();
                 }
             }
