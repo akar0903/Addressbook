@@ -1,0 +1,7 @@
+C:\Users\user\Source\Repos\address\address\bin\Debug\address.exe.config
+C:\Users\user\Source\Repos\address\address\bin\Debug\address.exe
+C:\Users\user\Source\Repos\address\address\bin\Debug\address.pdb
+C:\Users\user\Source\Repos\address\address\obj\Debug\address.csproj.AssemblyReference.cache
+C:\Users\user\Source\Repos\address\address\obj\Debug\address.csproj.CoreCompileInputs.cache
+C:\Users\user\Source\Repos\address\address\obj\Debug\address.exe
+C:\Users\user\Source\Repos\address\address\obj\Debug\address.pdb
