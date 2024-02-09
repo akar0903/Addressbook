@@ -66,6 +66,23 @@ namespace Address_Book_System
             }
             return results;
         }
-
+        public int GetContactCountByCity(string city)
+        {
+            int count = 0;
+            foreach (var addressBook in dict.Values)
+            {
+                count += addressBook.GetContactCountByCity(city);
+            }
+            return count;
+        }
+        public int GetContactCountByState(string state)
+        {
+            int count = 0;
+            foreach (var addressBook in dict.Values)
+            {
+                count += addressBook.GetContactCountByState(state);
+            }
+            return count;
+        }
     }
 }

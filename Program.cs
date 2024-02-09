@@ -114,7 +114,8 @@ namespace Address_Book_System
                         string searchCity = Console.ReadLine();
                         var cityResults = user.SearchPersonsInCity(searchCity);
                         DisplaySearchResults(cityResults);
-                        Thread.Sleep(2000);
+                        Console.WriteLine($"Number of contacts in {searchCity}: {user.GetContactCountByCity(searchCity)}");
+                        Thread.Sleep(4000);
                         Console.Clear();
                         break;
                     case 6:
@@ -123,7 +124,8 @@ namespace Address_Book_System
                         string searchState = Console.ReadLine();
                         var stateResults = user.SearchPersonsInState(searchState);
                         DisplaySearchResults(stateResults);
-                        Thread.Sleep(2000);
+                        Console.WriteLine($"Number of contacts in {searchState}: {user.GetContactCountByState(searchState)}");
+                        Thread.Sleep(4000);
                         Console.Clear();
                         break;
 

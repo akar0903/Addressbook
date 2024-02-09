@@ -187,6 +187,14 @@ namespace Address_Book_System
         {
             return contacts.Where(contact => contact.Firstname.Equals(name, StringComparison.OrdinalIgnoreCase)).ToList();
         }
+        public int GetContactCountByCity(string city)
+        {
+            return contacts.Count(contact => contact.City.Equals(city, StringComparison.OrdinalIgnoreCase));
+        }
+        public int GetContactCountByState(string state)
+        {
+            return contacts.Count(contact => contact.State.Equals(state, StringComparison.OrdinalIgnoreCase));
+        }
 
     }
 }
