@@ -84,5 +84,46 @@ namespace Address_Book_System
             }
             return count;
         }
+        public List<Contact> SortAllContactsByName()
+        {
+            List<Contact> sortedContacts = new List<Contact>();
+            foreach (var addressBook in dict.Values)
+            {
+                sortedContacts.AddRange(addressBook.GetAllContacts());
+            }
+            sortedContacts.Sort((x, y) => x.Firstname.CompareTo(y.Firstname));
+            return sortedContacts;
+        }
+
+        public List<Contact> SortAllContactsByCity()
+        {
+            List<Contact> sortedContacts = new List<Contact>();
+            foreach (var addressBook in dict.Values)
+            {
+                sortedContacts.AddRange(addressBook.GetAllContacts()); // use the GetAllContacts method
+            }
+            sortedContacts.Sort((x, y) => x.City.CompareTo(y.City));
+            return sortedContacts;
+        }
+        public List<Contact> SortAllContactsByState()
+        {
+            List<Contact> sortedContacts = new List<Contact>();
+            foreach (var addressBook in dict.Values)
+            {
+                sortedContacts.AddRange(addressBook.GetAllContacts()); // use the GetAllContacts method
+            }
+            sortedContacts.Sort((x, y) => x.State.CompareTo(y.State));
+            return sortedContacts;
+        }
+        public List<Contact> SortAllContactsByZip()
+        {
+            List<Contact> sortedContacts = new List<Contact>();
+            foreach (var addressBook in dict.Values)
+            {
+                sortedContacts.AddRange(addressBook.GetAllContacts()); // use the GetAllContacts method
+            }
+            sortedContacts.Sort((x, y) => x.Zipcode.CompareTo(y.Zipcode));
+            return sortedContacts;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,18 +24,55 @@ namespace Address_Book_System
             }
             Console.WriteLine("Enter the last name: ");
             string lastname = Console.ReadLine();
+            Console.WriteLine("Enter the Phone: ");
+            string phone = Console.ReadLine();
+            int f = 0;
+            do
+            {
+                if (!Regex.IsMatch(phone, @"^[6-8]\d{9}$"))
+                {
+                    Console.WriteLine("Invalid phone number format. Please enter a valid phone number.");
+                    string newphone = Console.ReadLine();
+                    if (Regex.IsMatch(newphone, @"^[6-8]\d{9}$"))
+                    {
+                        phone = newphone;
+                        f = 1;
+                    }
+                }
+                else
+                {
+                    f = 1;
+                }
+            } while (f == 0);
+
             Console.WriteLine("Enter the address: ");
             string address = Console.ReadLine();
             Console.WriteLine("Enter the city: ");
             string city = Console.ReadLine();
             Console.WriteLine("Enter the state: ");
             string state = Console.ReadLine();
-            Console.WriteLine("Enter the Phone: ");
-            string phone = Console.ReadLine();
             Console.WriteLine("Enter the email: ");
             string email = Console.ReadLine();
             Console.WriteLine("Enter the Zipcode: ");
-            string zipcode = Console.ReadLine();
+            long zipcode = Convert.ToInt64(Console.ReadLine());
+            int fl = 0;
+            do
+            {
+                if (!Regex.IsMatch(zipcode.ToString(), @"^[4-5]\d{5}$"))
+                {
+                    Console.WriteLine("Invalid zip code format. Please enter a valid zip code.");
+                    string newzipcode = Console.ReadLine();
+                    if (Regex.IsMatch(newzipcode, @"^[4-5]\d{5}$"))
+                    {
+                        zipcode = Convert.ToInt64(newzipcode);
+                        fl = 1;
+                    }
+                }
+                else
+                {
+                    fl = 1;
+                }
+            } while (fl == 0);
 
             Contact newCon = new Contact
             {
@@ -52,9 +90,17 @@ namespace Address_Book_System
             Thread.Sleep(4000);
             Console.Clear();
         }
-
+        public List<Contact> GetAllContacts()
+        {
+            return contacts;
+        }
+        public void SortContactsByName()
+        {
+            contacts.Sort((x, y) => x.Firstname.CompareTo(y.Firstname));
+        }
         public void Display_details()
         {
+            SortContactsByName();
             foreach (var contact in contacts)
             {
                 Console.WriteLine($"First Name: {contact.Firstname}");
@@ -68,6 +114,7 @@ namespace Address_Book_System
                 Console.WriteLine();
             }
         }
+
         public void Editted_Contact(string name)
         {
             Contact editContact = contacts.Find(contact => contact.Firstname == name);
@@ -123,7 +170,7 @@ namespace Address_Book_System
                         case 8:
                             Console.Clear();
                             Console.WriteLine("Enter New ZipCode : ");
-                            editContact.Zipcode = Console.ReadLine();
+                            editContact.Zipcode = Convert.ToInt64(Console.ReadLine());
                             break;
                         case 9:
                             Console.WriteLine("Edited..");

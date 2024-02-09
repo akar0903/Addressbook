@@ -18,11 +18,12 @@ namespace Address_Book_System
         {
             Console.WriteLine("Welcome to Address Book Program");
             Users user = new Users();
+            AddressBook addr = new AddressBook();
             int f = 0;
             do
             {
                 Console.WriteLine("Enter an Option to perform : ");
-                Console.WriteLine("1. Add a person\n2. DisplayPerson\n3. Add person details in address book\n4. Search by Name\n5. Search by City\n6. Search by State\n7. Exit");
+                Console.WriteLine("1. Add a person\n2. DisplayPerson\n3. Add person details in address book\n4. Search by Name\n5. Search by City\n6. Search by State\n7. Sort according to your choice\n8. Exit");
                 int choice = Convert.ToInt32(Console.ReadLine());
                 switch (choice)
                 {
@@ -31,7 +32,6 @@ namespace Address_Book_System
                         Console.WriteLine("Add the person name");
                         string name = Console.ReadLine();
                         user.AddPerson(name);
-
                         Thread.Sleep(2000);
                         Console.Clear();
                         break;
@@ -67,7 +67,7 @@ namespace Address_Book_System
                                         Console.Clear();
                                         Console.WriteLine("Display Details\n");
                                         address.Display_details();
-                                        Thread.Sleep(2000);
+                                        Thread.Sleep(8000);
                                         break;
                                     case 3:
                                         Console.Clear();
@@ -128,8 +128,50 @@ namespace Address_Book_System
                         Thread.Sleep(4000);
                         Console.Clear();
                         break;
-
                     case 7:
+                        Console.Clear();
+                        Console.WriteLine("Enter an option to sort contacts: ");
+                        Console.WriteLine("1. Sort by Name\n2. Sort by City\n3. Sort by State\n4. Sort by Zip\n5. Exit");
+                        int sortChoice = Convert.ToInt32(Console.ReadLine());
+                        switch (sortChoice)
+                        {
+                            case 1:
+                                Console.Clear();
+                                var sortedByName = user.SortAllContactsByName();
+                                DisplaySortedContacts(sortedByName);
+                                Thread.Sleep(4000);
+                                Console.Clear();
+                                break;
+                            case 2:
+                                Console.Clear();
+                                var sortedbyCity = user.SortAllContactsByCity();
+                                DisplaySortedContacts(sortedbyCity);
+                                Thread.Sleep(4000);
+                                Console.Clear();
+                                break;
+                            case 3:
+                                Console.Clear();
+                                var sortedbyState = user.SortAllContactsByState();
+                                DisplaySortedContacts(sortedbyState);
+                                Thread.Sleep(4000);
+                                Console.Clear();
+                                break;
+                            case 4:
+                                Console.Clear();
+                                var sortedbyZip = user.SortAllContactsByZip();
+                                DisplaySortedContacts(sortedbyZip);
+                                Thread.Sleep(4000);
+                                Console.Clear();
+                                break;
+                            case 5:
+                                Console.Clear();
+                                Console.WriteLine("Invalid Choice! Exit");
+                                Thread.Sleep(4000);
+                                Console.Clear();
+                                break;
+                        }
+                        break;
+                    case 8:
                         Console.Clear();
                         Console.WriteLine("Exited");
                         f = 1;
@@ -175,6 +217,29 @@ namespace Address_Book_System
             else
             {
                 Console.WriteLine("No matching contacts found.");
+            }
+        }
+        static void DisplaySortedContacts(List<Contact> sortedContacts)
+        {
+            if (sortedContacts.Any())
+            {
+                Console.WriteLine("Sorted Contacts:");
+                foreach (var contact in sortedContacts)
+                {
+                    Console.WriteLine($"First Name: {contact.Firstname}");
+                    Console.WriteLine($"Last Name: {contact.Lastname}");
+                    Console.WriteLine($"Address: {contact.Address}");
+                    Console.WriteLine($"City: {contact.City}");
+                    Console.WriteLine($"State: {contact.State}");
+                    Console.WriteLine($"Phone: {contact.Phonenumber}");
+                    Console.WriteLine($"Email: {contact.Email}");
+                    Console.WriteLine($"Zipcode: {contact.Zipcode}");
+                    Console.WriteLine();
+                }
+            }
+            else
+            {
+                Console.WriteLine("No contacts found.");
             }
         }
     }
