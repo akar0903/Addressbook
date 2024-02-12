@@ -10,7 +10,11 @@ namespace Address_Book_System
 {
     class AddressBook
     {
-        List<Contact> contacts = new List<Contact>();
+        public List<Contact> contacts = new List<Contact>();
+        public void AddContact(Contact contact)
+        {
+            contacts.Add(contact);
+        }
         public void Add_details()
         {
             Console.WriteLine("Enter the first name: ");

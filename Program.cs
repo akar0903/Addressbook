@@ -1,16 +1,12 @@
-﻿using Address_Book_System;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
+using CsvHelper;
 using System.Linq;
-using System.Runtime.ConstrainedExecution;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+using CsvHelper.Configuration;
+
 
 namespace Address_Book_System
 {
@@ -24,7 +20,18 @@ namespace Address_Book_System
             do
             {
                 Console.WriteLine("Enter an Option to perform : ");
-                Console.WriteLine("1. Add a person\n2. DisplayPerson\n3. Add person details in address book\n4. Search by Name\n5. Search by City\n6. Search by State\n7. Sort according to your choice\n8. Read\n9. Write\n10. Exit");
+                Console.WriteLine("1. Add a person\n" +
+                    "2. DisplayPerson\n" +
+                    "3. Add person details in address book\n" +
+                    "4. Search by Name\n" +
+                    "5. Search by City\n" +
+                    "6. Search by State\n" +
+                    "7. Sort according to your choice\n" +
+                    "8. Read\n" +
+                    "9. Write\n" +
+                    "10. Read from CSV\n" +
+                    "11. Write from CSV\n"+
+                    "12.Exit ");
                 int choice = Convert.ToInt32(Console.ReadLine());
                 switch (choice)
                 {
@@ -54,7 +61,11 @@ namespace Address_Book_System
                             {
                                 AddressBook address = user.getAddressBook(personname);
                                 Console.WriteLine("Enter an Option to perform : ");
-                                Console.WriteLine("1. Add Details\n2. Display Details\n3. Edit a Contact\n4. Delete a Contact\n5. Exit");
+                                Console.WriteLine("1. Add Details\n" +
+                                    "2. Display Details\n" +
+                                    "3. Edit a Contact\n" +
+                                    "4. Delete a Contact\n" +
+                                    "5. Exit");
                                 int option = Convert.ToInt32(Console.ReadLine());
                                 switch (option)
                                 {
@@ -174,7 +185,7 @@ namespace Address_Book_System
                         break;
                     case 8:
                         Console.Clear();
-                        LoadAddressBook();
+                        LoadAddressBook(user.GetPersons());
                         Thread.Sleep(4000);
                         Console.Clear();
                         break;
@@ -185,6 +196,20 @@ namespace Address_Book_System
                         Console.Clear();
                         break;
                     case 10:
+                        Console.Clear();
+                        Console.WriteLine("Read from CSV");
+                        ReadFromCSV();
+                        Thread.Sleep(4000);
+                        Console.Clear();
+                        break;
+                    case 11:
+                        Console.Clear();
+                        Console.WriteLine("Write to CSV");
+                        WriteToCSV(user.GetPersons());
+                        Thread.Sleep(4000);
+                        Console.Clear();
+                        break;
+                    case 12:
                         Console.Clear();
                         Console.WriteLine("Exited");
                         f = 1;
@@ -210,6 +235,36 @@ namespace Address_Book_System
                 Console.WriteLine("No matching contacts found.");
             }
         }
+        static void WriteToCSV(Dictionary<string, AddressBook> addressBooks)
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(@"D:\contacts.csv"))
+                using (CsvWriter csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    //csv.WriteField("First Name");
+                    //csv.WriteField("Last Name");
+                    //csv.WriteField("Address");
+                    //csv.WriteField("City");
+                    //csv.WriteField("State");
+                    //csv.WriteField("Phone");
+                    //csv.WriteField("Email");
+                    //csv.WriteField("Zipcode");
+                    //csv.NextRecord();
+
+                    foreach (var entry in addressBooks)
+                    {
+                        csv.WriteRecords(entry.Value.GetAllContacts());
+                        csv.NextRecord();
+                    }
+                }
+                Console.WriteLine("Address book data has been saved to 'contacts.csv'.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred while saving address book data to CSV: {ex.Message}");
+            }
+        }
         static void DisplaySearchResults(List<Contact> results)
         {
             if (results.Any())
@@ -233,6 +288,8 @@ namespace Address_Book_System
                 Console.WriteLine("No matching contacts found.");
             }
         }
+       
+
         static void SaveAddressBook(Dictionary<string, AddressBook> addressBooks)
         {
             try
@@ -264,9 +321,30 @@ namespace Address_Book_System
                 Console.WriteLine($"Error occurred while saving address book data: {ex.Message}");
             }
         }
-        static Dictionary<string, AddressBook> LoadAddressBook()
+        static void ReadFromCSV()
         {
-            Dictionary<string, AddressBook> addressBooks = new Dictionary<string, AddressBook>();
+
+            try
+            {
+                using (StreamReader reader = new StreamReader(@"D:\contacts.csv"))
+                using (CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    var records = csv.GetRecords<Contact>().ToList();
+                    foreach (var record in records)
+                    {
+                        Console.WriteLine(record.Firstname + " " + record.Lastname + " " + record.Phonenumber + " " + record.Address + " " + record.City + " " + record.State + " " + record.Email + " " + record.Zipcode);
+                    }
+                }
+                Console.WriteLine("Address book data has been loaded from 'contacts.csv'.");
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred while loading address book data from CSV: {ex.Message}");
+            }
+        }
+        static void LoadAddressBook(Dictionary<string, AddressBook> addressBooks)
+        {
             try
             {
                 using (StreamReader reader = new StreamReader(@"C:\Users\user\Documents\contacts.txt"))
@@ -277,35 +355,52 @@ namespace Address_Book_System
 
                     while ((line = reader.ReadLine()) != null)
                     {
+                       
                         string[] data = line.Split(',');
+
+                        
                         if (data.Length >= 8)
                         {
+                            string firstName = data[0];
+                            string lastName = data[1];
+                            string address = data[2];
+                            string city = data[3];
+                            string state = data[4];
+                            long zipcode = Convert.ToInt64(data[5]);
+                            string phoneNumber = data[6];
+                            string email = data[7];
+
                             Contact contact = new Contact
                             {
-                                Firstname = data[0],
-                                Lastname = data[1],
-                                Address = data[2],
-                                City = data[3],
-                                State = data[4],
-                                Zipcode = Convert.ToInt64(data[5]),
-                                Phonenumber = data[6],
-                                Email = data[7]
+                                Firstname = firstName,
+                                Lastname = lastName,
+                                Address = address,
+                                City = city,
+                                State = state,
+                                Zipcode = zipcode,
+                                Phonenumber = phoneNumber,
+                                Email = email
                             };
+                            if (currentAddressBook == null || !addressBooks.TryGetValue(currentName, out currentAddressBook))
+                            {
+                                currentAddressBook = new AddressBook();
+                                addressBooks[currentName] = currentAddressBook;
+                            }
+                            currentAddressBook.AddContact(contact);
+                            Console.WriteLine(line);
                         }
-                        Console.WriteLine(line);
+                        else
+                        {
+                            Console.WriteLine(line);
+                        }
                     }
-                    if (currentAddressBook != null)
-                    {
-                        addressBooks.Add(currentName, currentAddressBook);
-                    }
+                    Console.WriteLine("Address book data has been loaded from 'contacts.txt'.");
                 }
-                Console.WriteLine("Address book data has been loaded from 'contacts.txt'.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error occurred while loading address book data: {ex.Message}");
             }
-            return addressBooks;
         }
     }
 }

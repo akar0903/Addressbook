@@ -64,6 +64,7 @@ namespace Address_Book_System
             get { return zipcode; }
             set { zipcode = value; }
         }
+
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType())
