@@ -100,7 +100,7 @@ namespace Address_Book_System
             List<Contact> sortedContacts = new List<Contact>();
             foreach (var addressBook in dict.Values)
             {
-                sortedContacts.AddRange(addressBook.GetAllContacts()); // use the GetAllContacts method
+                sortedContacts.AddRange(addressBook.GetAllContacts());
             }
             sortedContacts.Sort((x, y) => x.City.CompareTo(y.City));
             return sortedContacts;
@@ -110,7 +110,7 @@ namespace Address_Book_System
             List<Contact> sortedContacts = new List<Contact>();
             foreach (var addressBook in dict.Values)
             {
-                sortedContacts.AddRange(addressBook.GetAllContacts()); // use the GetAllContacts method
+                sortedContacts.AddRange(addressBook.GetAllContacts());
             }
             sortedContacts.Sort((x, y) => x.State.CompareTo(y.State));
             return sortedContacts;
@@ -120,7 +120,7 @@ namespace Address_Book_System
             List<Contact> sortedContacts = new List<Contact>();
             foreach (var addressBook in dict.Values)
             {
-                sortedContacts.AddRange(addressBook.GetAllContacts()); // use the GetAllContacts method
+                sortedContacts.AddRange(addressBook.GetAllContacts());
             }
             sortedContacts.Sort((x, y) => x.Zipcode.CompareTo(y.Zipcode));
             return sortedContacts;

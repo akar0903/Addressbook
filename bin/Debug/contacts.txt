@@ -1,0 +1,36 @@
+First Name: arun
+Last Name: karthik
+Address: potheri
+City: chennai
+State: tamil nadu
+Phone: 6798984450
+Email: av0019@srmist.edu.in
+Zipcode: 403203
+
+First Name: namit
+Last Name: lodh
+Address: potheri
+City: chennai
+State: odisha
+Phone: 6666666666
+Email: nl8032@srmist.edu.in
+Zipcode: 403203
+
+First Name: kota
+Last Name: rao
+Address: potheri
+City: guntur
+State: tamil nadu
+Phone: 7777777777
+Email: kota123@gmail.com
+Zipcode: 403203
+
+First Name: vadlaputi
+Last Name: dinesh
+Address: potheri
+City: chennai
+State: tamil nadu
+Phone: 8888888888
+Email: vd1234@srmist.edu.in
+Zipcode: 403203
+

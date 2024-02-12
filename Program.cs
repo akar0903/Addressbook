@@ -2,9 +2,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,12 +20,11 @@ namespace Address_Book_System
         {
             Console.WriteLine("Welcome to Address Book Program");
             Users user = new Users();
-            AddressBook addr = new AddressBook();
             int f = 0;
             do
             {
                 Console.WriteLine("Enter an Option to perform : ");
-                Console.WriteLine("1. Add a person\n2. DisplayPerson\n3. Add person details in address book\n4. Search by Name\n5. Search by City\n6. Search by State\n7. Sort according to your choice\n8. Exit");
+                Console.WriteLine("1. Add a person\n2. DisplayPerson\n3. Add person details in address book\n4. Search by Name\n5. Search by City\n6. Search by State\n7. Sort according to your choice\n8. Read\n9. Write\n10. Exit");
                 int choice = Convert.ToInt32(Console.ReadLine());
                 switch (choice)
                 {
@@ -138,28 +139,28 @@ namespace Address_Book_System
                             case 1:
                                 Console.Clear();
                                 var sortedByName = user.SortAllContactsByName();
-                                DisplaySortedContacts(sortedByName);
+                                DisplaySearchResults(sortedByName);
                                 Thread.Sleep(4000);
                                 Console.Clear();
                                 break;
                             case 2:
                                 Console.Clear();
                                 var sortedbyCity = user.SortAllContactsByCity();
-                                DisplaySortedContacts(sortedbyCity);
+                                DisplaySearchResults(sortedbyCity);
                                 Thread.Sleep(4000);
                                 Console.Clear();
                                 break;
                             case 3:
                                 Console.Clear();
                                 var sortedbyState = user.SortAllContactsByState();
-                                DisplaySortedContacts(sortedbyState);
+                                DisplaySearchResults(sortedbyState);
                                 Thread.Sleep(4000);
                                 Console.Clear();
                                 break;
                             case 4:
                                 Console.Clear();
                                 var sortedbyZip = user.SortAllContactsByZip();
-                                DisplaySortedContacts(sortedbyZip);
+                                DisplaySearchResults(sortedbyZip);
                                 Thread.Sleep(4000);
                                 Console.Clear();
                                 break;
@@ -173,12 +174,25 @@ namespace Address_Book_System
                         break;
                     case 8:
                         Console.Clear();
+                        LoadAddressBook();
+                        Thread.Sleep(4000);
+                        Console.Clear();
+                        break;
+                    case 9:
+                        Console.Clear();
+                        SaveAddressBook(user.GetPersons());
+                        Thread.Sleep(4000);
+                        Console.Clear();
+                        break;
+                    case 10:
+                        Console.Clear();
                         Console.WriteLine("Exited");
                         f = 1;
                         break;
                 }
             } while (f == 0);
         }
+
         static void DisplayPersonCityAndState(List<Contact> results)
         {
             if (results.Any())
@@ -219,28 +233,79 @@ namespace Address_Book_System
                 Console.WriteLine("No matching contacts found.");
             }
         }
-        static void DisplaySortedContacts(List<Contact> sortedContacts)
+        static void SaveAddressBook(Dictionary<string, AddressBook> addressBooks)
         {
-            if (sortedContacts.Any())
+            try
             {
-                Console.WriteLine("Sorted Contacts:");
-                foreach (var contact in sortedContacts)
+                using (StreamWriter writer = new StreamWriter(@"C:\Users\user\Documents\contacts.txt"))
                 {
-                    Console.WriteLine($"First Name: {contact.Firstname}");
-                    Console.WriteLine($"Last Name: {contact.Lastname}");
-                    Console.WriteLine($"Address: {contact.Address}");
-                    Console.WriteLine($"City: {contact.City}");
-                    Console.WriteLine($"State: {contact.State}");
-                    Console.WriteLine($"Phone: {contact.Phonenumber}");
-                    Console.WriteLine($"Email: {contact.Email}");
-                    Console.WriteLine($"Zipcode: {contact.Zipcode}");
-                    Console.WriteLine();
+                    foreach (var entry in addressBooks)
+                    {
+                        writer.WriteLine($"Address Book for: {entry.Key}");
+                        foreach (var contact in entry.Value.GetAllContacts())
+                        {
+                            writer.WriteLine($"First Name: {contact.Firstname}");
+                            writer.WriteLine($"Last Name: {contact.Lastname}");
+                            writer.WriteLine($"Address: {contact.Address}");
+                            writer.WriteLine($"City: {contact.City}");
+                            writer.WriteLine($"State: {contact.State}");
+                            writer.WriteLine($"Phone: {contact.Phonenumber}");
+                            writer.WriteLine($"Email: {contact.Email}");
+                            writer.WriteLine($"Zipcode: {contact.Zipcode}");
+                            writer.WriteLine();
+                        }
+                        writer.WriteLine();
+                    }
                 }
+                Console.WriteLine("Address book data has been saved to 'contacts.txt'.");
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("No contacts found.");
+                Console.WriteLine($"Error occurred while saving address book data: {ex.Message}");
             }
+        }
+        static Dictionary<string, AddressBook> LoadAddressBook()
+        {
+            Dictionary<string, AddressBook> addressBooks = new Dictionary<string, AddressBook>();
+            try
+            {
+                using (StreamReader reader = new StreamReader(@"C:\Users\user\Documents\contacts.txt"))
+                {
+                    string line;
+                    string currentName = "";
+                    AddressBook currentAddressBook = null;
+
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        string[] data = line.Split(',');
+                        if (data.Length >= 8)
+                        {
+                            Contact contact = new Contact
+                            {
+                                Firstname = data[0],
+                                Lastname = data[1],
+                                Address = data[2],
+                                City = data[3],
+                                State = data[4],
+                                Zipcode = Convert.ToInt64(data[5]),
+                                Phonenumber = data[6],
+                                Email = data[7]
+                            };
+                        }
+                        Console.WriteLine(line);
+                    }
+                    if (currentAddressBook != null)
+                    {
+                        addressBooks.Add(currentName, currentAddressBook);
+                    }
+                }
+                Console.WriteLine("Address book data has been loaded from 'contacts.txt'.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred while loading address book data: {ex.Message}");
+            }
+            return addressBooks;
         }
     }
 }

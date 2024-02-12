@@ -242,6 +242,5 @@ namespace Address_Book_System
         {
             return contacts.Count(contact => contact.State.Equals(state, StringComparison.OrdinalIgnoreCase));
         }
-
     }
 }
